@@ -1,0 +1,11 @@
+diff --git a/node_modules/s-array/es/index.js b/node_modules/s-array/es/index.js
+index 46012fc..b6812cb 100644
+--- a/node_modules/s-array/es/index.js
++++ b/node_modules/s-array/es/index.js
+@@ -1,5 +1,5 @@
+ // synchronous array signals for S.js
+-import S from "s-js";
++import S from "s-js/dist/es/S";
+ export default function SArray(values) {
+     if (!Array.isArray(values))
+         throw new Error("SArray must be initialized with an array");

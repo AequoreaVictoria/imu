@@ -1,0 +1,30 @@
+#!/usr/bin/env node
+const fs = require("fs-extra");
+const path = require("path");
+const execSync = require("child_process").execSync;
+
+function findRoot() {
+    if (path.parse(process.cwd()).root === process.cwd()) {
+        console.error("ERROR: No imu directory found in project!");
+        process.exit(1);
+    }
+
+    let nodeRoot = fs.existsSync("./.imu");
+    if (!nodeRoot) {
+        process.chdir("../");
+        nodeRoot = fs.existsSync("./.imu");
+    }
+    if (!nodeRoot) findRoot();
+}
+
+if (process.argv[2] === "init") {
+    fs.copySync(`${__dirname}/init`, process.cwd());
+    try { execSync("npm i", {stdio: "inherit"}); }
+    catch { process.exit(1); }
+    return;
+}
+
+findRoot();
+const args = process.argv.slice(2).join(" ");
+try { execSync(`node ./.imu/run.js ${args}`, {stdio: "inherit"}); }
+catch { process.exit(1); }

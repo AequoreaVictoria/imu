@@ -1,0 +1,6 @@
+Tupfile.lua
+.git
+.tup
+/tmp/
+/deploy/
+/node_modules/
