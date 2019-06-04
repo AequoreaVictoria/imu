@@ -27,6 +27,7 @@
     "s-js": "^0.4.9",
     "stage0": "0.0.24"
   },
+  "browserslist": ["defaults"],
   "scripts": {
     "postinstall": "patch-package --patch-dir .imu/patch/",
     "build": "node ./.imu/run.js client-release",

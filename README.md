@@ -13,7 +13,7 @@ follow the provided project layout.
 It uses [tup][0] to accomplish this.
 
 For rapid prototyping, [Stage0][1], [S.js][2] and [TailwindCSS][3] related
-libraries are provided. Their use are optional and they consume roughly 4KB of
+libraries are provided. Their use are optional and they consume roughly 3~6KB of
 the compressed bundle size when optimized.
 
 JavaScript is ES6, CSS is [PostCSS Preset Env][4], HTML is preprocessed, all is
