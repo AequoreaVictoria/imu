@@ -13,10 +13,10 @@ follow the provided project layout.
 It uses [tup][0] to accomplish this.
 
 For rapid prototyping, [Stage0][1], [S.js][2] and [TailwindCSS][3] related
-libraries are provided. Their use are optional and they consume roughly 3~6KB of
-the compressed bundle size when optimized. You also have the option of using
-the [Vue.js][24] suite instead of [Stage0][1] and [S.js][2], however this adds
-about 30KB~ in size and has different performance characteristics. It is,
+libraries are provided. Their use are optional and they consume roughly 3 to
+6KB of the compressed bundle size when optimized. You also have the option of
+using the [Vue.js][24] suite instead of [Stage0][1] and [S.js][2], however this
+adds about 30KB in size and has different performance characteristics. It is,
 however, much more familiar to developers.
 
 JavaScript is ES6, CSS is [PostCSS Preset Env][4], HTML is preprocessed, all is

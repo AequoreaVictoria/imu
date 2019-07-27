@@ -17,6 +17,12 @@ function findRoot() {
     if (!nodeRoot) findRoot();
 }
 
+if (process.argv[2] === "version" || process.argv[2] === "ver") {
+    const package = require('./package.json');
+    console.info(`imu v${package.version}`);
+    return;
+}
+
 if (process.argv[2] === "init") {
     const type = process.argv[3] ? process.argv[3] : "stage0";
 
