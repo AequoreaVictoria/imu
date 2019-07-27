@@ -260,8 +260,6 @@ var App = Vue.component("Example", {render, staticRenderFns});
 export default App;
 ```
 
-The import paths
-
 ## Server Overview
 Optional [.NET Core 3.0][7] and [MySQL][8] support is provided as follows:
 
