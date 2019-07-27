@@ -41,7 +41,6 @@ postcss([
     }),
     tailwind(`./${STYLE_PATH}/${TAILWIND}.js`),
     presetEnv({
-        browsers: "last 3 versions",
         stage: 2,
         features: {"nesting-rules": true}
     })

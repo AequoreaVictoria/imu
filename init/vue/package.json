@@ -28,6 +28,9 @@
     "vue-router": "^3.0.7",
     "vuex": "^3.1.1"
   },
+  "browserslist": [
+    "defaults"
+  ],
   "scripts": {
     "build": "node ./.imu/run.js client-release",
     "new": "node ./.imu/run.js new",
