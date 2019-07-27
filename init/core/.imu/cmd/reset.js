@@ -16,7 +16,7 @@ const artifacts = [
 
 module.exports = function handleReset() {
     require("../lib/root")();
-    for (let i = 0; i < artifacts.length; i++) fs.removeSync(artifacts[i]);
+    for (let a in artifacts) fs.removeSync(artifacts[a]);
 
     console.info("--- Project artifacts removed!");
 };

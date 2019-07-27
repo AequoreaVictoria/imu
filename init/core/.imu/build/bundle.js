@@ -6,7 +6,7 @@ const {
     ROOT
 } = require("../lib/constants");
 
-const fs = require("fs");
+const fs = require("fs-extra");
 const path = require("path");
 const htmlmin = require("html-minifier").minify;
 
@@ -61,6 +61,5 @@ if (isRelease) {
     });
 }
 
-fs.mkdirSync(`./${DEPLOY_PATH}/`, {recursive: true});
-fs.writeFileSync(`./${DEPLOY_PATH}/${page}.html`, buffer);
+fs.outputFileSync(`./${DEPLOY_PATH}/${page}.html`, buffer);
 console.info(`--- Bundled ${page} -> ${DEPLOY_PATH + path.sep + page}.html`);

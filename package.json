@@ -1,7 +1,7 @@
 {
   "name": "imu-build",
   "description": "Incrementally build statically-linked pages and servers with tup.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "imu.js",
   "license": "CC0-1.0",
   "bin": {
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "child_process": "^1.0.2",
-    "fs-extra": "8.0.1",
+    "fs-extra": "8.1.0",
     "path": "^0.12.7"
   }
 }

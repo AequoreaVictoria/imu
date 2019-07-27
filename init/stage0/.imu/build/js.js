@@ -5,13 +5,13 @@ const {
     ROOT
 } = require("../lib/constants");
 
-const fs = require("fs");
+const fs = require("fs-extra");
 const path = require("path");
 const rollup = require("rollup").rollup;
 const includepaths = require("rollup-plugin-includepaths");
 const commonjs = require("rollup-plugin-commonjs");
 const minify = require("terser").minify;
-const imuHmin = require("../lib/hmin");
+const hmin = require("../lib/hmin");
 
 const isRelease = process.argv[2] === "--release";
 const page = process.argv[3];
@@ -41,10 +41,10 @@ rollup({
                     max_line_len: 0
                 }
             });
-            code = imuHmin(release.code);
+            code = hmin(release.code);
         }
-        fs.mkdirSync(`./${TMP}/${page}/`, {recursive: true});
-        fs.writeFileSync(`./${TMP}/${page}/${ROOT}.js`, code);
+
+        fs.outputFileSync(`./${TMP}/${page}/${ROOT}.js`, code);
         console.info(`--- Compiled ${page + path.sep + ROOT}.js -> ${TMP + path.sep + page + path.sep + ROOT}.js`);
     });
 });

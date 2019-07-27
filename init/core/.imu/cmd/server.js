@@ -15,10 +15,9 @@ const execSync = require("child_process").execSync;
 function cpConf() {
     fs.mkdirSync(`./${DEPLOY}`, {recursive: true});
     fs.copySync("./nginx.conf", `./${DEPLOY}/nginx.conf`, {overwrite: true});
-    fs.copySync(`./${SERVER}.ini`, `./${DEPLOY}/${SERVER}.ini`, {overwrite: true});
     fs.copySync(`./${SSL}/`, `./${DEPLOY}/${SSL}/`, {overwrite: true});
     console.info(`--- Copied nginx.conf -> ${DEPLOY + path.sep}`);
-    console.info(`--- Copied ${SERVER}.ini -> ${DEPLOY + path.sep}`);
+    console.info(`--- Copied restart.sh -> ${DEPLOY + path.sep}`);
     console.info(`--- Copied ${SSL + path.sep} -> ${DEPLOY + path.sep + SSL + path.sep}`);
 }
 
@@ -31,15 +30,11 @@ function mkSQL() {
     const origin = `./${SQL_PATH}/${ROOT}.sql`;
 
     let buffer = fs.readFileSync(origin);
-    buffer = require("../lib/import")(buffer, origin, {
-        paths: [`${SQL_PATH}/${TABLES}`],
-        extensions: {
-            imports: [".sql"]
-        }
+    buffer = require("../lib/import-sql")(buffer, origin, {
+        paths: [`${SQL_PATH}/${TABLES}`]
     });
 
-    fs.mkdirSync(`./${SQL_PATH}/${PATCHES}/`, {recursive: true});
-    fs.writeFileSync(`./${SQL_PATH}/${PATCHES}/0000000001.sql`, buffer);
+    fs.outputFileSync(`./${SQL_PATH}/${PATCHES}/0000000001.sql`, buffer);
     console.info(`--- Compiled SQL tables -> ${PATCHES + path.sep}0000000001.sql`);
 }
 
@@ -61,7 +56,7 @@ function mkServer() {
         execSync("dotnet publish "
             + `--self-contained --runtime ${runtime} `
             + "--configuration Release "
-            + `--output ..${path.sep + DEPLOY + path.sep + SERVER + path.sep} `
+            + `--output .${path.sep + DEPLOY + path.sep + SERVER + path.sep} `
             + `.${path.sep + SERVER + path.sep}`,
             {stdio: "inherit"});
     }
@@ -84,7 +79,7 @@ function mkServerLinux() {
         execSync("dotnet publish "
             + "--self-contained --runtime linux-x64 "
             + "--configuration Release "
-            + `--output ..${path.sep + DEPLOY + path.sep + SERVER + path.sep} `
+            + `--output .${path.sep + DEPLOY + path.sep + SERVER + path.sep} `
             + `.${path.sep + SERVER + path.sep}`,
             {stdio: "inherit"});
     }
@@ -97,9 +92,9 @@ function mkServerLinux() {
 module.exports = function handleServer(args) {
     require("../lib/root")();
     switch (args) {
-    case "copy-conf": return cpConf();
-    case "sql": return mkSQL();
-    case "server": return mkServer();
-    case "server-linux": return mkServerLinux();
+        case "copy-conf": return cpConf();
+        case "sql": return mkSQL();
+        case "server": return mkServer();
+        case "server-linux": return mkServerLinux();
     }
 };

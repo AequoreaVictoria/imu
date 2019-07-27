@@ -23,11 +23,10 @@ const {
     getComponentJS,
     getSQLRoot,
     getSQLTable,
-    getServerProj,
-    getServerINI
+    getServerProj
 } = require("../lib/templates");
 
-const fs = require("fs");
+const fs = require("fs-extra");
 const path = require("path");
 
 function err() {
@@ -52,26 +51,22 @@ let component;
 let name;
 
 function mkLicenseHTML() {
-    fs.mkdirSync(`./${PAGES_PATH}/${page}/`, {recursive: true});
-    fs.writeFileSync(`./${PAGES_PATH}/${page}/${LICENSE}.html`, getLicenseHTML());
+    fs.outputFileSync(`./${PAGES_PATH}/${page}/${LICENSE}.html`, getLicenseHTML());
     console.info(`--- Created ${page + path.sep + LICENSE}.html`);
 }
 
 function mkRootHTML() {
-    fs.mkdirSync(`./${PAGES_PATH}/${page}/`, {recursive: true});
-    fs.writeFileSync(`./${PAGES_PATH}/${page}/${ROOT}.html`, getRootHTML(page));
+    fs.outputFileSync(`./${PAGES_PATH}/${page}/${ROOT}.html`, getRootHTML(page));
     console.info(`--- Created ${page + path.sep + ROOT}.html`);
 }
 
 function mkRootCSS() {
-    fs.mkdirSync(`./${PAGES_PATH}/${page}/`, {recursive: true});
-    fs.writeFileSync(`./${PAGES_PATH}/${page}/${ROOT}.css`, getRootCSS(`${STYLE}/${BASE}`));
+    fs.outputFileSync(`./${PAGES_PATH}/${page}/${ROOT}.css`, getRootCSS(`${STYLE}/${BASE}`));
     console.info(`--- Created ${page + path.sep + ROOT}.css`);
 }
 
 function mkBaseCSS() {
-    fs.mkdirSync(`./${STYLE_PATH}/`, {recursive: true});
-    fs.writeFileSync(`./${STYLE_PATH}/${BASE}.css`, getBaseCSS());
+    fs.outputFileSync(`./${STYLE_PATH}/${BASE}.css`, getBaseCSS());
     console.info(`--- Created ${STYLE + path.sep + BASE}.css`);
 }
 
@@ -88,52 +83,40 @@ function mkTailwindJS() {
 }
 
 function mkRootJS() {
-    fs.mkdirSync(`./${PAGES_PATH}/${page}/`, {recursive: true});
-    fs.writeFileSync(`./${PAGES_PATH}/${page}/${ROOT}.js`, getRootJS(page));
+    fs.outputFileSync(`./${PAGES_PATH}/${page}/${ROOT}.js`, getRootJS(page));
     console.info(`--- Created ${page + path.sep + ROOT}.js`);
 }
 
 function mkComponentJS() {
-    fs.mkdirSync(`./${PAGES_PATH}/${page}/${COMPONENTS}/`, {recursive: true});
-    fs.writeFileSync(`./${PAGES_PATH}/${page}/${COMPONENTS}/${component}.js`, getComponentJS(component));
+    fs.outputFileSync(`./${PAGES_PATH}/${page}/${COMPONENTS}/${component}.js`, getComponentJS(component));
     console.info(`--- Created ${page + path.sep + COMPONENTS + path.sep + component}.js`);
 }
 
 function mkFaviconICO() {
-    fs.mkdirSync(`./${STATIC_PATH}/`, {recursive: true});
-    fs.writeFileSync(`./${STATIC_PATH}/favicon.ico`, Buffer.from(
+    fs.outputFileSync(`./${STATIC_PATH}/favicon.ico`, Buffer.from(
         "4749463839610100010090000000000000000021f90405100000002c00000000010001000002020401003b",
         "hex"));
     console.info(`--- Created ${STATIC_PATH + path.sep}favicon.ico`);
 }
 
 function mkSQLRoot() {
-    fs.mkdirSync(`./${SQL_PATH}/`, {recursive: true});
-    fs.writeFileSync(`./${SQL_PATH}/${ROOT}.sql`, getSQLRoot(name));
+    fs.outputFileSync(`./${SQL_PATH}/${ROOT}.sql`, getSQLRoot(name));
     console.info(`--- Created ${SQL_PATH + path.sep + ROOT}.sql`);
 }
 
 function mkSQLTable() {
-    fs.mkdirSync(`./${SQL_PATH}/${TABLES}/`, {recursive: true});
-    fs.writeFileSync(`./${SQL_PATH}/${TABLES}/${name}.sql`, getSQLTable(name));
+    fs.outputFileSync(`./${SQL_PATH}/${TABLES}/${name}.sql`, getSQLTable(name));
     console.info(`--- Created ${TABLES + path.sep + name}.sql`);
 }
 
 function mkSQLPatch() {
-    fs.mkdirSync(`./${SQL_PATH}/${PATCHES}`, {recursive: true});
-    fs.writeFileSync(`./${SQL_PATH}/${PATCHES}/${name}.sql`, Buffer.from(""));
+    fs.outputFileSync(`./${SQL_PATH}/${PATCHES}/${name}.sql`, Buffer.from(""));
     console.info(`--- Created ${PATCHES + path.sep + name}.sql`);
 }
 
 function mkServerProj() {
-    fs.mkdirSync(`./${SERVER}/`, {recursive: true});
-    fs.writeFileSync(`./${SERVER}/${SERVER}.csproj`, getServerProj(name));
+    fs.outputFileSync(`./${SERVER}/${SERVER}.csproj`, getServerProj(name));
     console.info(`--- Created ${SERVER + path.sep + SERVER}.csproj`);
-}
-
-function mkServerINI() {
-    fs.writeFileSync(`./${SERVER}.ini`, getServerINI(name));
-    console.info(`--- Created ${SERVER}.ini`);
 }
 
 module.exports = function handleNew() {
@@ -197,7 +180,6 @@ module.exports = function handleNew() {
     if (needsServer) {
         queue.push(mkSQLRoot);
         queue.push(mkServerProj);
-        queue.push(mkServerINI);
     }
 
     if (queue.length === 0) {

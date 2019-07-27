@@ -180,48 +180,31 @@ function getServerProj(name) {
     return `\
 <Project Sdk="Microsoft.NET.Sdk.Web">
     <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RuntimeFrameworkVersion>2.1.1</RuntimeFrameworkVersion>
-    <StartupObject>${name}.Program</StartupObject>
-    <Version>1.0.0</Version>
-    <NoWarn>NU1701</NoWarn>
+      <TargetFramework>netcoreapp3.0</TargetFramework>
+      <StartupObject>${name}.Program</StartupObject>
+      <Version>1.0.0</Version>
+      <NoWarn>NU1602,NU1701</NoWarn>
     </PropertyGroup>
     <ItemGroup>
-    <EmbeddedResource Include="mysql\\patches\\*.sql" />
+        <EmbeddedResource Include="mysql\patches\*.sql" />
     </ItemGroup>
     <ItemGroup>
-    <PackageReference Include="Dapper" Version="1.60.6" />
-    <PackageReference Include="Dapper.Contrib" Version="1.60.1" />
-    <PackageReference Include="FluentValidation" Version="8.2.2" />
-    <PackageReference Include="ini-parser" Version="2.5.2" />
-    <PackageReference Include="jose-jwt" Version="2.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
-    <PackageReference Include="MySql.Data" Version="8.0.15" />
-    <PackageReference Include="Nancy" Version="2.0.0-clinteastwood" />
-    <PackageReference Include="Nancy.Authentication.Stateless" Version="2.0.0-clinteastwood" />
-    <PackageReference Include="Nancy.Serialization.JsonNet" Version="2.0.0-clinteastwood" />
-    <PackageReference Include="Nancy.Validation.FluentValidation" Version="2.0.0-clinteastwood" />
-    <PackageReference Include="Scrypt.NET" Version="1.3.0" />
+        <PackageReference Include="Carter" Version="4.2.0" />
+        <PackageReference Include="Dapper" Version="1.60.6" />
+        <PackageReference Include="Dapper.Contrib" Version="1.60.1" />
+        <PackageReference Include="FluentValidation" Version="8.5.0-preview4" />
+        <PackageReference Include="GracefullShutdown" Version="1.0.3" />
+        <PackageReference Include="jose-jwt" Version="2.4.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.0.0-preview7.19362.4" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.0.0-preview7.19362.4" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.0.0-preview7.19362.4" />
+        <PackageReference Include="MySql.Data" Version="8.0.17" />
+        <PackageReference Include="SparkPost" Version="1.14.0" />
     </ItemGroup>
     <ItemGroup>
-    <Folder Include="mysql\\patches" />
+        <Folder Include="mysql\patches" />
     </ItemGroup>
 </Project>
-`;
-}
-
-function getServerINI(name) {
-    return `\
-[App]
-AppVer = 1.0.0
-ToolVer = 1
-
-[MySql]
-Host = 127.0.0.1
-Username = ${name}
-Password = ${name}
-Database = ${name}
-
 `;
 }
 
@@ -234,6 +217,5 @@ module.exports = {
     getComponentJS,
     getSQLRoot,
     getSQLTable,
-    getServerProj,
-    getServerINI
+    getServerProj
 };

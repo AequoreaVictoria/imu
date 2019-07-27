@@ -14,7 +14,10 @@ It uses [tup][0] to accomplish this.
 
 For rapid prototyping, [Stage0][1], [S.js][2] and [TailwindCSS][3] related
 libraries are provided. Their use are optional and they consume roughly 3~6KB of
-the compressed bundle size when optimized.
+the compressed bundle size when optimized. You also have the option of using
+the [Vue.js][24] suite instead of [Stage0][1] and [S.js][2], however this adds
+about 30KB~ in size and has different performance characteristics. It is,
+however, much more familiar to developers.
 
 JavaScript is ES6, CSS is [PostCSS Preset Env][4], HTML is preprocessed, all is
 aggressively minified and packed into single HTML page. It is easy to build many
@@ -32,7 +35,7 @@ encouraged to fork, modify and otherwise twist the contents to your needs.
 ### Optional Dependencies
 * `npm install --global imu-build`
 * [tup][0]
-* [.NET Core 2.1][7]
+* [.NET Core 3.0][7]
 * [MySQL][8]
 
 Neither [tup][0] nor `imu-build` are required to build an *imu* project. Your
@@ -40,8 +43,8 @@ end-users may always execute `npm build` in the project root to get a
 release build.
 
 #### Tup
-By default, it generates [tup][0] build logic to provide the incrementing, 
-parallel build and deployment system. 
+By default, it generates [tup][0] build logic to provide the incrementing,
+parallel build and deployment system.
 
 Although it was designed to work with [tup][0], its use is optional. If it
 is not found, the entire project is built as a single synchronous thread.
@@ -55,8 +58,8 @@ This guide will assume you will have installed `imu-build` in order to use the
 root you may always use `npm run` to execute the very same commands.
 
 There is no default command for `npm run` by itself, however
-`npm run build` will execute a release build. 
- 
+`npm run build` will execute a release build.
+
 You will also need to run the `new` command as `npm run new -- -p example`
 with the `--` in order to pass arguments.
 
@@ -64,12 +67,16 @@ The `init` command is only available with `imu-build`.
 
 ## Client Overview
 
-| Commands           | Description 
+| Commands           | Description
 |--------------------|---------------------------------------------------------
-| imu init           | Installs the build scripts and npm dependencies. 
-| imu new [options] | Create new projects and templates.                 
-| imu client-debug   | Builds the client in debug mode.                   
-| imu client-release | Builds the client in release mode.                 
+| imu init [option]  | Installs the build scripts and npm dependencies.
+| imu new [options]  | Create new projects and templates.
+| imu client-debug   | Builds the client in debug mode.
+| imu client-release | Builds the client in release mode.
+
+The `init` command may take an optional arguement of either `stage0` or `vue`.
+If not provided, it will default to `stage0`. The following example explains
+the default workflow.
 
 ``` Shell
 $ npm install --global imu-build
@@ -103,16 +110,16 @@ Names should not contain spaces and should be valid as an HTML ID tag. These
 commands generate a new set of files to edit inside `client/pages/(PageName)`.
 
 ### Layout
-|                   | Page Structure                               
+|                   | Page Structure
 |-------------------|----------------------------------------------
-| components/*.js   | Component code.                              
-| license.html      | License comment tag; prepended to the page.  
-| root.html         | Entry point into the page's actual DOM code. 
-| root.css          | Entry point into the page style.             
-| root.js           | Entry point into the page code.              
+| components/*.js   | Component code.
+| license.html      | License comment tag; prepended to the page.
+| root.html         | Entry point into the page's actual DOM code.
+| root.css          | Entry point into the page style.
+| root.js           | Entry point into the page code.
 
-Each page is given a `components/` directory to hold [Stage0][1] component
-JS, HTML templates and assorted JavaScript code specific to the page.
+Each page is given a `components/` directory to hold component JS,
+HTML templates and assorted JavaScript code specific to the page.
 
 Most editing will be done on `root.js` and its child `components/*`. When
 you need to embed resources into the actual DOM, such as inlining SVGs and
@@ -126,16 +133,16 @@ to resolve conflicts.
 The compiled page files are placed in `deploy/client`.
 
 
-|                   | Project Structure                                  
+|                   | Project Structure
 |-------------------|----------------------------------------------------
-| client/pages      | Code for each application page.                    
-| client/share      | Code shared between each application page.         
-| client/style      | Style code and Tailwind configuration.             
-| client/svg        | SVG icons available for inlining.                  
-| client/util       | Third-party libraries used by application pages.   
-| deploy/client     | The destination of compiled pages.                 
+| client/pages      | Code for each application page.
+| client/share      | Code shared between each application page.
+| client/style      | Style code and Tailwind configuration.
+| client/svg        | SVG icons available for inlining.
+| client/util       | Third-party libraries used by application pages.
+| deploy/client     | The destination of compiled pages.
 | deploy/static     | All static files and content, available via /static
-| tmp               | Temporary files created during the build process.  
+| tmp               | Temporary files created during the build process.
 
 The `client/style` directory contains the `tailwind.config.js` file and
 is a good place for stylesheets you wish to `@import` into pages. For example,
@@ -162,9 +169,9 @@ may be the same across all of your pages. You will need to create the
 `client/share` directory, should you choose to use it.
 
 Other potential paths could include things such as `client/store` and
-`client/api` for holding modules for [S.js][2] store and API request related
-abstractions. `client/router.js` could hold your application's router
-configuration. These paths require no specific support from *imu*.
+`client/api` for holding modules for [S.js][2] (or [Vuex][24]) store and API
+request related abstractions. `client/router.js` could hold your application's
+router configuration. These paths require no specific support from *imu*.
 
 ### Bundling
 JavaScript is bundled with [Rollup.js][13], offering you ES6-level modules your
@@ -185,19 +192,35 @@ compression with gzip.
 *imu* provides a set of directives available for use within files being
 built. For HTML it is: `@import`, `@script` and`@svg`.
 
-The `@import` directive must be enclosed in a comment tag. The path provided
-should be relative to the current file path. This will copy the contents of the
-file into its place place.
+The `@import` directive must be enclosed in a comment tag. This will copy the
+contents of the file into its place place.
+
+As mentioned prior, `@import` will all search for paths relative to the
+importing file. It will also search the subdirectories of `client` and
+`client/pages`.
 
 A `@script` directive has also been included, which behaves the same as
 `@import` but will wrap the results in `<script type="x/templates">` tags. An
 ID based upon the filename is included in these tags. As such, filenames must
 consist only of valid ID characters and should not contain spaces.
 
+In [Vue.js][24] HTML templates, only the `@import` directive is available.
 
 ```HTML
 <div>
   <!-- @import "./local/project/file.html" //-->
+</div>
+```
+
+```HTML
+<div>
+  <!-- @import "main/components/example" //-->
+</div>
+```
+
+```HTML
+<div>
+  <!-- @import "share/example" //-->
 </div>
 ```
 
@@ -212,13 +235,40 @@ the filename, sans extension. The same restrictions on naming that apply to
 Furthermore, the `fill` attribute is set to 'inherit' and any `height` or
 `width` attribute is removed prior to inlining.
 
+##### Vue
+A `@vue` directive has been provided for use inside JavaScript components.
+It will compile and inline the specified HTML template as a set of `render`
+and `staticRenderFns` variables that can then be passed to the Vue object.
+
+The search path behavior is identical to `@import` discussed above. It
+also will resolve and inline any `@import` directive encountered.
+
+```HTML
+<section>
+    <!-- @import "main/components/something" //-->
+    <p>Example!</p>
+</section>
+```
+
+```JavaScript
+import Vue from "vue/dist/vue.runtime.esm";
+
+// @vue "main/components/example"
+
+var App = Vue.component("Example", {render, staticRenderFns});
+
+export default App;
+```
+
+The import paths
+
 ## Server Overview
-Optional [.NET Core 2.1][7] and [MySQL][8] support is provided as follows:
+Optional [.NET Core 3.0][7] and [MySQL][8] support is provided as follows:
 
     * `imu server` builds the server project natively & SQL schema.
     * `imu server-linux` builds the server project specifically for Linux.
     * `imu sql` builds the SQL schema.
-    
+
 Copying configuration files, including [nginx][5] is done by:
 
     * `imu copy-conf` Copies all server-related configuration into 'deploy/'.
@@ -229,7 +279,7 @@ Furthermore, `new` has the following additional commands:
     * `imu new --table Name` starts a new SQL table file.
     * `imu new --patch` starts a new SQL migration patch file.
 
-Neither [.NET Core 2.1][7] or [MySQL][8] build support makes use of [tup][0].
+Neither [.NET Core 3.0][7] or [MySQL][8] build support makes use of [tup][0].
 
 ### SQL Preprocessor
 An equivalent of `@import` has been added for [MySQL][8] and is used much the same.
@@ -237,6 +287,8 @@ An equivalent of `@import` has been added for [MySQL][8] and is used much the sa
 ```MySQL
 # @import "./local/table/name"
 ```
+
+This is processed via the `imu sql` command.
 
 ## Resetting
 Should any issues with build artifacts arise, you may always try `imu reset`.
@@ -263,7 +315,7 @@ libraries.
 [4]: https://preset-env.cssdb.org/
 [5]: https://nginx.org/
 [6]: https://nodejs.org/
-[7]: https://www.microsoft.com/net/download/dotnet-core/2.1
+[7]: https://www.microsoft.com/net/download/dotnet-core/3.0
 [8]: https://www.mysql.com/
 [9]: https://github.com/csstools/normalize.css/
 [10]: http://postcss.org/
@@ -277,3 +329,4 @@ libraries.
 [19]: https://github.com/css/csso
 [20]: https://github.com/kangax/html-minifier
 [23]: https://github.com/AequoreaVictoria/imu/blob/master/LICENSE
+[24]: https://vuejs.org

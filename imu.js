@@ -18,7 +18,11 @@ function findRoot() {
 }
 
 if (process.argv[2] === "init") {
-    fs.copySync(`${__dirname}/init`, process.cwd());
+    const type = process.argv[3] ? process.argv[3] : "stage0";
+
+    fs.copySync(`${__dirname}/init/core`, process.cwd());
+    fs.copySync(`${__dirname}/init/${type}`, process.cwd());
+
     try { execSync("npm i", {stdio: "inherit"}); }
     catch { process.exit(1); }
     return;

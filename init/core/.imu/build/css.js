@@ -8,7 +8,7 @@ const {
     BASE
 } = require("../lib/constants");
 
-const fs = require("fs");
+const fs = require("fs-extra");
 const path = require("path");
 const postcss = require("postcss");
 const cssImport = require("postcss-import");
@@ -41,6 +41,7 @@ postcss([
     }),
     tailwind(`./${STYLE_PATH}/${TAILWIND}.js`),
     presetEnv({
+        browsers: "last 3 versions",
         stage: 2,
         features: {"nesting-rules": true}
     })
@@ -70,7 +71,6 @@ postcss([
         buffer = csso.minify(purger.purge()[0].css, {comments: "none"}).css;
     }
 
-    fs.mkdirSync(`./${TMP}/${page}/`, {recursive: true});
-    fs.writeFileSync(`./${TMP}/${page}/${ROOT}.css`, buffer);
+    fs.outputFileSync(`./${TMP}/${page}/${ROOT}.css`, buffer);
     console.info(`--- Compiled ${page + path.sep + ROOT}.css -> ${TMP + path.sep + page + path.sep + ROOT}.css`);
 });
