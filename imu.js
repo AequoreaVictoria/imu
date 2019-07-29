@@ -38,7 +38,7 @@ if (process.argv[2] === 'init') {
     fs.outputFileSync(`${target}/version.json`,
         `{\n  "version": "${pkg.version}"\n}\n`);
 
-    fs.copySync(`${__dirname}/init/core/.gitignore`, `${process.cwd()}/.gitignore`);
+    fs.moveSync(`${target}/git_ignore`, `${process.cwd()}/.gitignore`);
     fs.moveSync(`${target}/package.json`, `${process.cwd()}/package.json`);
     fs.moveSync(`${target}/package-lock.json`, `${process.cwd()}/package-lock.json`);
 
