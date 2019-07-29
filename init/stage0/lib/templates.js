@@ -186,7 +186,7 @@ function getServerProj(name) {
       <NoWarn>NU1602,NU1701</NoWarn>
     </PropertyGroup>
     <ItemGroup>
-        <EmbeddedResource Include="mysql\patches\*.sql" />
+        <EmbeddedResource Include="mysql\\patches\\*.sql" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Carter" Version="4.2.0" />
@@ -202,7 +202,7 @@ function getServerProj(name) {
         <PackageReference Include="SparkPost" Version="1.14.0" />
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="mysql\patches" />
+        <Folder Include="mysql\\patches" />
     </ItemGroup>
 </Project>
 `;

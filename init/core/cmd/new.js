@@ -12,7 +12,7 @@ const {
     SQL_PATH,
     PATCHES,
     TABLES
-} = require("../lib/constants");
+} = require('../lib/constants');
 
 const {
     getLicenseHTML,
@@ -24,23 +24,23 @@ const {
     getSQLRoot,
     getSQLTable,
     getServerProj
-} = require("../lib/templates");
+} = require('../lib/templates');
 
-const fs = require("fs-extra");
-const path = require("path");
+const fs = require('fs-extra');
+const path = require('path');
 
 function err() {
-    console.info("USAGE: \n" +
-        "    imu new <--page|-p> <--component|-c>\n" +
-        "        The -c and -p flags are optional. They may only be used once each.\n" +
-        "    imu new --server <ServerName>\n" +
-        "        Creates server.csproj using ServerName.\n" +
-        "    imu new --sql <DatabaseName>\n" +
-        "        Creates root.sql using DatabaseName.\n" +
-        "    imu new --table <TableName>\n" +
-        "        Creates TableName.sql.\n" +
-        "    imu new --patch\n" +
-        "        Creates a blank patch .sql named with the current UNIX timestamp.\n");
+    console.info('USAGE: \n' +
+        '    imu new <--page|-p> <--component|-c>\n' +
+        '        The -c and -p flags are optional. They may only be used once each.\n' +
+        '    imu new --server <ServerName>\n' +
+        '        Creates server.csproj using ServerName.\n' +
+        '    imu new --sql <DatabaseName>\n' +
+        '        Creates root.sql using DatabaseName.\n' +
+        '    imu new --table <TableName>\n' +
+        '        Creates TableName.sql.\n' +
+        '    imu new --patch\n' +
+        '        Creates a blank patch .sql named with the current UNIX timestamp.\n');
     process.exit(1);
 }
 
@@ -71,12 +71,12 @@ function mkBaseCSS() {
 }
 
 function mkTailwindJS() {
-    const execSync = require("child_process").execSync;
+    const execSync = require('child_process').execSync;
 
     fs.mkdirSync(`./${STYLE_PATH}/`, {recursive: true});
-    try { execSync(`node ./node_modules/tailwindcss/lib/cli.js init ./${STYLE_PATH}/${TAILWIND}.js --full`) }
-    catch {
-        console.error("ERROR: Could not create Tailwind configuration!");
+    try { execSync(`node ./node_modules/tailwindcss/lib/cli.js init ./${STYLE_PATH}/${TAILWIND}.js --full`); }
+    catch(e) {
+        console.error('ERROR: Could not create Tailwind configuration!');
         process.exit(1);
     }
     console.info(`--- Created ${STYLE + path.sep + TAILWIND}.js`);
@@ -94,8 +94,8 @@ function mkComponentJS() {
 
 function mkFaviconICO() {
     fs.outputFileSync(`./${STATIC_PATH}/favicon.ico`, Buffer.from(
-        "4749463839610100010090000000000000000021f90405100000002c00000000010001000002020401003b",
-        "hex"));
+        '4749463839610100010090000000000000000021f90405100000002c00000000010001000002020401003b',
+        'hex'));
     console.info(`--- Created ${STATIC_PATH + path.sep}favicon.ico`);
 }
 
@@ -110,7 +110,7 @@ function mkSQLTable() {
 }
 
 function mkSQLPatch() {
-    fs.outputFileSync(`./${SQL_PATH}/${PATCHES}/${name}.sql`, Buffer.from(""));
+    fs.outputFileSync(`./${SQL_PATH}/${PATCHES}/${name}.sql`, Buffer.from(''));
     console.info(`--- Created ${PATCHES + path.sep + name}.sql`);
 }
 
@@ -120,29 +120,29 @@ function mkServerProj() {
 }
 
 module.exports = function handleNew() {
-    require("../lib/root")();
+    require('../lib/root')();
 
-    if (process.argv[3] === "help") err();
+    if (process.argv[3] === 'help') err();
 
-    component = (process.argv[3] === "-c" || process.argv[3] === "--component") ? process.argv[4] :
-        (process.argv[5] === "-c" || process.argv[5] === "--component") ? process.argv[6] : undefined;
-    page = (process.argv[3] === "-p" || process.argv[3] === "--page") ? process.argv[4] :
-        (process.argv[5] === "-p" || process.argv[5] === "--page") ? process.argv[6] : undefined;
+    component = (process.argv[3] === '-c' || process.argv[3] === '--component') ? process.argv[4] :
+        (process.argv[5] === '-c' || process.argv[5] === '--component') ? process.argv[6] : undefined;
+    page = (process.argv[3] === '-p' || process.argv[3] === '--page') ? process.argv[4] :
+        (process.argv[5] === '-p' || process.argv[5] === '--page') ? process.argv[6] : undefined;
 
     let needsServer = false;
     let needsSqlRoot = false;
     let needsSqlTable = false;
     let needsSqlPatch = false;
-    if (process.argv[3] === "--server") {
+    if (process.argv[3] === '--server') {
         name = process.argv[4];
         needsServer = true;
-    } else if (process.argv[3] === "--sql") {
+    } else if (process.argv[3] === '--sql') {
         name = process.argv[4];
         needsSqlRoot = true;
-    } else if (process.argv[3] === "--table") {
+    } else if (process.argv[3] === '--table') {
         name = process.argv[4];
         needsSqlTable = true;
-    } else if (process.argv[3] === "--patch") {
+    } else if (process.argv[3] === '--patch') {
         name = Math.floor(Date.now() / 1000);
         needsSqlPatch = true;
     }
@@ -183,7 +183,7 @@ module.exports = function handleNew() {
     }
 
     if (queue.length === 0) {
-        console.error("ERROR: Nothing to make!");
+        console.error('ERROR: Nothing to make!');
         process.exit(1);
     } else {
         for (let i = 0; i < queue.length; i++) queue[i]();

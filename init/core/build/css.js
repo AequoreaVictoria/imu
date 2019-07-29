@@ -6,23 +6,23 @@ const {
     ROOT,
     TAILWIND,
     BASE
-} = require("../lib/constants");
+} = require('../lib/constants');
 
-const fs = require("fs-extra");
-const path = require("path");
-const postcss = require("postcss");
-const cssImport = require("postcss-import");
-const tailwind = require("tailwindcss");
-const presetEnv = require("postcss-preset-env");
-const purgecss = require("purgecss");
-const whitelister = require("purgecss-whitelister");
-const csso = require("csso");
+const fs = require('fs-extra');
+const path = require('path');
+const postcss = require('postcss');
+const cssImport = require('postcss-import');
+const tailwind = require('tailwindcss');
+const presetEnv = require('postcss-preset-env');
+const purgecss = require('purgecss');
+const whitelister = require('purgecss-whitelister');
+const csso = require('csso');
 
-const isRelease = process.argv[2] === "--release";
+const isRelease = process.argv[2] === '--release';
 const page = process.argv[3];
 const origin = `./${PAGES_PATH}/${page}/${ROOT}.css`;
 
-require("../lib/root")();
+require('../lib/root')();
 
 /* Process @imports, Tailwind and PostCSS features into standard CSS.
  * 'path' controls the addition of search paths for @import.
@@ -37,12 +37,12 @@ require("../lib/root")();
 let buffer = fs.readFileSync(origin);
 postcss([
     cssImport({
-        path: [`${CLIENT}`, `${PAGES_PATH}`, "node_modules"]
+        path: [`${CLIENT}`, `${PAGES_PATH}`, 'node_modules']
     }),
     tailwind(`./${STYLE_PATH}/${TAILWIND}.js`),
     presetEnv({
         stage: 2,
-        features: {"nesting-rules": true}
+        features: {'nesting-rules': true}
     })
 ]).process(buffer, {from: undefined}).then(result => {
     buffer = result.css;
@@ -60,14 +60,14 @@ postcss([
                         return content.match(/[A-Za-z0-9:_/-]+/g);
                     }
                 },
-                extensions: ["html", "js"]
+                extensions: ['html', 'js']
             }],
             whitelist: whitelister([
-                "./node_modules/tailwindcss/dist/base.css",
+                './node_modules/tailwindcss/dist/base.css',
                 `./${STYLE_PATH}/${BASE}.css`
             ])
         });
-        buffer = csso.minify(purger.purge()[0].css, {comments: "none"}).css;
+        buffer = csso.minify(purger.purge()[0].css, {comments: 'none'}).css;
     }
 
     fs.outputFileSync(`./${TMP}/${page}/${ROOT}.css`, buffer);

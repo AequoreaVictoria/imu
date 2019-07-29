@@ -30,7 +30,7 @@ Reading the  `.imu` source installed into your project is a good idea. You are
 encouraged to fork, modify and otherwise twist the contents to your needs.
 
 ### Requirements
-* [node.js][6]
+* [Node.js][6]
 
 ### Optional Dependencies
 * `npm install --global imu-build`
@@ -50,7 +50,7 @@ Although it was designed to work with [tup][0], its use is optional. If it
 is not found, the entire project is built as a single synchronous thread.
 This is both slower, not incremental and may also result in stale artifacts in
 the deployment directory, but this will allow anyone to build a project with
-no additional dependencies beyond [node.js][6].
+no additional dependencies beyond [Node.js][6].
 
 #### imu-build
 This guide will assume you will have installed `imu-build` in order to use the
@@ -293,6 +293,12 @@ Should any issues with build artifacts arise, you may always try `imu reset`.
 
 This will remove all build artifacts from the project. As your project expands,
 you may wish to update the list of files `reset` will remove in `./.imu/reset.js`.
+
+## Version Check
+You may quickly determine the version installed by using `imu version`. This
+will print the version of the globally installed `imu-build` package. If you
+are currently in a project directory, it will also print the version of the
+build scripts that have been installed via `imu init`.
 
 ## License
 > Dual-Licensed. Pick one. Pick both. Pick carefully.

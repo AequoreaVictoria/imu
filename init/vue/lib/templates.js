@@ -1,4 +1,4 @@
-  /* These are used for generating files by the 'new' task.
+/* These are used for generating files by the 'new' task.
  */
 
 // Prepended to all 'client-release' built pages.
@@ -131,7 +131,7 @@ var router = new VueRouter({
     linkActiveClass: "is-active",
     base: "/",
     routes: [
-        // {name: "Default", path: "/", component: Default},
+        // {name: "${page}", path: "/", component: ${page},
     ]
 });
 
@@ -178,7 +178,7 @@ CREATE TABLE \`${name}\` (
 
 function getServerProj(name) {
     return `\
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
     <PropertyGroup>
       <TargetFramework>netcoreapp3.0</TargetFramework>
       <StartupObject>${name}.Program</StartupObject>
@@ -186,7 +186,7 @@ function getServerProj(name) {
       <NoWarn>NU1602,NU1701</NoWarn>
     </PropertyGroup>
     <ItemGroup>
-        <EmbeddedResource Include="mysql\patches\*.sql" />
+        <EmbeddedResource Include="mysql\\patches\\*.sql" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Carter" Version="4.2.0" />
@@ -202,7 +202,7 @@ function getServerProj(name) {
         <PackageReference Include="SparkPost" Version="1.14.0" />
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="mysql\patches" />
+        <Folder Include="mysql\\patches" />
     </ItemGroup>
 </Project>
 `;

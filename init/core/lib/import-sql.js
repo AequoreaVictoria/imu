@@ -1,17 +1,17 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
 const lineSplit = /(?:\r\n|\r|\n)/g;
 const sqlTag = /^#[\t ]*@import[\t ]*["'](.*)["'][\t ]*$/;
 
 let Current = {
-    paths: "",
-    extensions: [".sql"]
+    paths: '',
+    extensions: ['.sql']
 };
 
 function exists(file) {
     try { return fs.statSync(file).isFile(); }
-    catch { return false; }
+    catch(e) { return false; }
 }
 
 function find(file) {
@@ -39,7 +39,7 @@ function searchRoot(file) {
 function handleSql(origin, file, result) {
     const match = searchRelative(file, origin) || searchRoot(file);
     if (!match) {
-        console.error("ERROR: Could not @import " + file + "!");
+        console.error('ERROR: Could not @import ' + file + '!');
         process.exit(1);
     }
 
@@ -48,13 +48,13 @@ function handleSql(origin, file, result) {
 }
 
 function scan(buffer, origin, newFile) {
-    const array = buffer.toString("utf8").split(lineSplit);
+    const array = buffer.toString().split(lineSplit);
     let result = [];
     for (const line of array) {
         if (line.match(sqlTag)) result = handleSql(origin, line.match(sqlTag)[1], result);
         else result.push(line);
     }
-    if (newFile) return result.join("\n");
+    if (newFile) return result.join('\n');
     else return result;
 }
 

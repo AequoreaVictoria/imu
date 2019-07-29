@@ -1,6 +1,6 @@
-const fs = require("fs");
-const path = require("path");
-const xmldom = require("xmldom");
+const fs = require('fs');
+const path = require('path');
+const xmldom = require('xmldom');
 
 const parser = new xmldom.DOMParser();
 const serializer = new xmldom.XMLSerializer();
@@ -11,32 +11,32 @@ const scriptTag = /^[\t ]*<!--[\t ]*@script[\t ]*["'](.*)["'][\t ]*\/\/-->[\t ]*
 const svgTag = /^[\t ]*<!--[\t ]*@svg[\t ]*["'](.*)["'][\t ]*\/\/-->[\t ]*$/;
 
 let Current = {
-    paths: "",
+    paths: '',
     extensions: {
-        import: [".html", ".js", ".json"],
-        script: [".js", ".json"],
-        svg: [".svg"]
+        import: ['.html', '.js', '.json'],
+        script: ['.js', '.json'],
+        svg: ['.svg']
     }
 };
 
 function exists(file) {
     try { return fs.statSync(file).isFile(); }
-    catch { return false; }
+    catch(e) { return false; }
 }
 
 function find(type, file) {
     if (exists(file)) return file;
-    if (type === "import") {
+    if (type === 'import') {
         for (let ext in Current.extensions.import) {
             const match = file + Current.extensions.import[ext];
             if (exists(match)) return match;
         }
-    } else if (type === "script") {
+    } else if (type === 'script') {
         for (let ext in Current.extensions.script) {
             const match = file + Current.extensions.script[ext];
             if (exists(match)) return match;
         }
-    } else if (type === "svg") {
+    } else if (type === 'svg') {
         for (let ext in Current.extensions.svg) {
             const match = file + Current.extensions.svg[ext];
             if (exists(match)) return match;
@@ -59,23 +59,23 @@ function searchRoot(type, file) {
 }
 
 function processSvg(buffer, name) {
-    let icon = parser.parseFromString(buffer.toString("utf8"), "image/svg+xml");
-    let svg = icon.getElementsByTagName("svg")[0];
-    svg.setAttribute("id", `svg-${name}`);
-    svg.setAttribute("fill", "inherit");
-    svg.removeAttribute("height");
-    svg.removeAttribute("width");
+    let icon = parser.parseFromString(buffer.toString(), 'image/svg+xml');
+    let svg = icon.getElementsByTagName('svg')[0];
+    svg.setAttribute('id', `svg-${name}`);
+    svg.setAttribute('fill', 'inherit');
+    svg.removeAttribute('height');
+    svg.removeAttribute('width');
     return serializer.serializeToString(icon);
 }
 
 function handleSvg(origin, file, result) {
-    const match = searchRelative("svg", file, origin) || searchRoot("svg", file);
+    const match = searchRelative('svg', file, origin) || searchRoot('svg', file);
     if (!match) {
-        console.error("ERROR: Could not add @svg " + file + "!");
+        console.error('ERROR: Could not add @svg ' + file + '!');
         process.exit(1);
     }
 
-    const name = path.basename(match, ".svg");
+    const name = path.basename(match, '.svg');
     result.push(processSvg(fs.readFileSync(match), name));
     return result;
 }
@@ -83,12 +83,12 @@ function handleSvg(origin, file, result) {
 function handleScript(origin, file, result) {
     let tagName = file.split(/[\\/]/).pop();
     for (let ext in Current.extensions.script) {
-        tagName = tagName.replace(Current.extensions.script[ext], "");
+        tagName = tagName.replace(Current.extensions.script[ext], '');
     }
 
-    const match = searchRelative("script", file, origin) || searchRoot("script", file);
+    const match = searchRelative('script', file, origin) || searchRoot('script', file);
     if (!match) {
-        console.error("ERROR: Could not add @script " + file + "!");
+        console.error('ERROR: Could not add @script ' + file + '!');
         process.exit(1);
     }
 
@@ -97,9 +97,9 @@ function handleScript(origin, file, result) {
 }
 
 function handleImport(origin, file, result) {
-    const match = searchRelative("import", file, origin) || searchRoot("import", file);
+    const match = searchRelative('import', file, origin) || searchRoot('import', file);
     if (!match) {
-        console.error("ERROR: Could not @import " + file + "!");
+        console.error('ERROR: Could not @import ' + file + '!');
         process.exit(1);
     }
 
@@ -108,7 +108,7 @@ function handleImport(origin, file, result) {
 }
 
 function scan(buffer, origin, tagged, tagName, newFile) {
-    const array = buffer.toString("utf8").split(lineSplit);
+    const array = buffer.toString().split(lineSplit);
     let result = [];
     for (const line of array) {
         if (line.match(importTag)) result = handleImport(origin, line.match(importTag)[1], result);
@@ -118,9 +118,9 @@ function scan(buffer, origin, tagged, tagName, newFile) {
     }
     if (tagged) {
         result.splice(0, 0, `<script type="x/templates" id="script-${tagName}">`);
-        result.push("</script>");
+        result.push('</script>');
     }
-    if (newFile) return result.join("\n");
+    if (newFile) return result.join('\n');
     else return result;
 }
 

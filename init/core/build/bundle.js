@@ -4,15 +4,15 @@ const {
     DEPLOY_PATH,
     LICENSE,
     ROOT
-} = require("../lib/constants");
+} = require('../lib/constants');
 
-const fs = require("fs-extra");
-const path = require("path");
-const htmlmin = require("html-minifier").minify;
+const fs = require('fs-extra');
+const path = require('path');
+const htmlmin = require('html-minifier').minify;
 
-const imuInject = require("../lib/inject");
+const imuInject = require('../lib/inject');
 
-const isRelease = process.argv[2] === "--release";
+const isRelease = process.argv[2] === '--release';
 const page = process.argv[3];
 
 const origin = `./${TMP}/${page}/${ROOT}.html`;
@@ -20,7 +20,7 @@ const JS = `./${TMP}/${page}/${ROOT}.js`;
 const CSS = `./${TMP}/${page}/${ROOT}.css`;
 const License = `./${PAGES_PATH}/${page}/${LICENSE}.html`;
 
-require("../lib/root")();
+require('../lib/root')();
 
 const hasJS = fs.existsSync(JS);
 const hasCSS = fs.existsSync(CSS);
@@ -31,9 +31,9 @@ if (hasCSS) {
     buffer = imuInject({
         input: fs.readFileSync(CSS),
         target: buffer,
-        key: "css",
-        prepend: "<style>",
-        append: "</style>"
+        key: 'css',
+        prepend: '<style>',
+        append: '</style>'
     });
 }
 
@@ -41,9 +41,9 @@ if (hasJS) {
     buffer = imuInject({
         input: fs.readFileSync(JS),
         target: buffer,
-        key: "js",
-        prepend: "<script>",
-        append: "</script>"
+        key: 'js',
+        prepend: '<script>',
+        append: '</script>'
     });
 }
 if (isRelease) {

@@ -4,19 +4,19 @@ const {
     DEPLOY_PATH,
     SERVER,
     SSL
-} = require("../lib/constants");
+} = require('../lib/constants');
 
-const fs = require("fs-extra");
+const fs = require('fs-extra');
 
 const artifacts = [
-    ".tup", `${TMP}`, `${DEPLOY_PATH}`, `${DEPLOY}/nginx.conf`,
+    '.tup', `${TMP}`, `${DEPLOY_PATH}`, `${DEPLOY}/nginx.conf`,
     `${DEPLOY}/${SERVER}`, `${DEPLOY}/${SSL}`, `${DEPLOY}/${SERVER}.ini`,
     `${SERVER}/obj`, `${SERVER}/bin`
 ];
 
 module.exports = function handleReset() {
-    require("../lib/root")();
+    require('../lib/root')();
     for (let a in artifacts) fs.removeSync(artifacts[a]);
 
-    console.info("--- Project artifacts removed!");
+    console.info('--- Project artifacts removed!');
 };
