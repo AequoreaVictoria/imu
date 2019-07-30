@@ -17,7 +17,6 @@ function cpConf() {
     fs.copySync('./nginx.conf', `./${DEPLOY}/nginx.conf`, {overwrite: true});
     fs.copySync(`./${SSL}/`, `./${DEPLOY}/${SSL}/`, {overwrite: true});
     console.info(`--- Copied nginx.conf -> ${DEPLOY + path.sep}`);
-    console.info(`--- Copied restart.sh -> ${DEPLOY + path.sep}`);
     console.info(`--- Copied ${SSL + path.sep} -> ${DEPLOY + path.sep + SSL + path.sep}`);
 }
 
@@ -92,9 +91,9 @@ function mkServerLinux() {
 module.exports = function handleServer(args) {
     require('../lib/root')();
     switch (args) {
-    case 'copy-conf': return cpConf();
-    case 'sql': return mkSQL();
-    case 'server': return mkServer();
-    case 'server-linux': return mkServerLinux();
+        case 'copy-conf': return cpConf();
+        case 'sql': return mkSQL();
+        case 'server': return mkServer();
+        case 'server-linux': return mkServerLinux();
     }
 };

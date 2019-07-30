@@ -54,32 +54,32 @@ function hasTup() {
 }
 
 switch (currentCommand) {
-case 'new': {
-    require('./cmd/new')();
-    break;
-}
-case 'reset': {
-    require('./cmd/reset')();
-    break;
-}
-case 'sql':
-case 'server':
-case 'server-linux':
-case 'copy-conf': {
-    require('./cmd/server')(currentCommand);
-    break;
-}
-case 'all': {
-    require('./cmd/tup')('client-release');
-    require('./cmd/server')('server');
-    break;
-}
-case 'client-release':
-case 'client-debug':
-default: {
-    if (hasTup('tup')) require('./cmd/tup')(currentCommand ? currentCommand : 'client-debug');
-    else require('./cmd/tupless')(currentCommand ? currentCommand : 'client-debug');
-}
+    case 'new': {
+        require('./cmd/new')();
+        break;
+    }
+    case 'reset': {
+        require('./cmd/reset')();
+        break;
+    }
+    case 'sql':
+    case 'server':
+    case 'server-linux':
+    case 'copy-conf': {
+        require('./cmd/server')(currentCommand);
+        break;
+    }
+    case 'all': {
+        require('./cmd/tup')('client-release');
+        require('./cmd/server')('server');
+        break;
+    }
+    case 'client-release':
+    case 'client-debug':
+    default: {
+        if (hasTup('tup')) require('./cmd/tup')(currentCommand ? currentCommand : 'client-debug');
+        else require('./cmd/tupless')(currentCommand ? currentCommand : 'client-debug');
+    }
 }
 
 process.exit(0);

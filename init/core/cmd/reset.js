@@ -10,8 +10,7 @@ const fs = require('fs-extra');
 
 const artifacts = [
     '.tup', `${TMP}`, `${DEPLOY_PATH}`, `${DEPLOY}/nginx.conf`,
-    `${DEPLOY}/${SERVER}`, `${DEPLOY}/${SSL}`, `${DEPLOY}/${SERVER}.ini`,
-    `${SERVER}/obj`, `${SERVER}/bin`
+    `${DEPLOY}/${SERVER}`, `${DEPLOY}/${SSL}`, `${SERVER}/obj`, `${SERVER}/bin`
 ];
 
 module.exports = function handleReset() {
