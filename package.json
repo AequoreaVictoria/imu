@@ -1,9 +1,9 @@
 {
   "name": "imu-build",
   "description": "Incrementally build statically-linked pages and servers with tup.",
-  "version": "0.0.10",
+  "version": "0.0.12",
   "main": "imu.js",
-  "license": "CC0-1.0",
+  "license": "0BSD",
   "bin": {
     "imu": "./imu.js"
   },

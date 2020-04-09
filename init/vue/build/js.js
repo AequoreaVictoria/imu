@@ -9,8 +9,8 @@ const fs = require('fs-extra');
 const path = require('path');
 const rollup = require('rollup').rollup;
 const includepaths = require('rollup-plugin-includepaths');
-const commonjs = require('rollup-plugin-commonjs');
-const replace = require('rollup-plugin-replace');
+const commonjs = require('@rollup/plugin-commonjs');
+const replace = require('@rollup/plugin-replace');
 const importVue = require('../lib/import-vue');
 const minify = require('terser').minify;
 

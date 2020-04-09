@@ -301,11 +301,7 @@ are currently in a project directory, it will also print the version of the
 build scripts that have been installed via `imu init`.
 
 ## License
-> Dual-Licensed. Pick one. Pick both. Pick carefully.
-
-*imu* is available as [Jollo LNT or CC0 | Public Domain][23], as you
-desire. Either way, you may make full use of the included files for any
-reason, without attribution should you wish to leave no trace.
+[0BSD][23]
 
 As *imu* aggressively strips code, including the original copyright comments,
 the relevant copyright notices are added as a document comment to all pages
@@ -332,5 +328,5 @@ libraries.
 [18]: https://www.purgecss.com/
 [19]: https://github.com/css/csso
 [20]: https://github.com/kangax/html-minifier
-[23]: https://github.com/AequoreaVictoria/imu/blob/master/LICENSE
+[23]: https://opensource.org/licenses/0BSD
 [24]: https://vuejs.org

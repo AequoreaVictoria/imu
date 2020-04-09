@@ -14,7 +14,7 @@ const postcss = require('postcss');
 const cssImport = require('postcss-import');
 const tailwind = require('tailwindcss');
 const presetEnv = require('postcss-preset-env');
-const purgecss = require('purgecss');
+const { PurgeCSS } = require('purgecss');
 const whitelister = require('purgecss-whitelister');
 const csso = require('csso');
 
@@ -44,22 +44,18 @@ postcss([
         stage: 2,
         features: {'nesting-rules': true}
     })
-]).process(buffer, {from: undefined}).then(result => {
+]).process(buffer, {from: undefined}).then(async result => {
     buffer = result.css;
 
     if (isRelease) {
-        const purger = new purgecss({
+        const purged = await new PurgeCSS().purge({
             css: [{raw: buffer}],
             content: [
                 `./${TMP}/${page}/**/*.html`,
                 `./${TMP}/${page}/**/*.js`
             ],
             extractors: [{
-                extractor: class {
-                    static extract(content) {
-                        return content.match(/[A-Za-z0-9:_/-]+/g);
-                    }
-                },
+                extractor: content => content.match(/[A-Za-z0-9:_/-]+/g) || [],
                 extensions: ['html', 'js']
             }],
             whitelist: whitelister([
@@ -67,7 +63,7 @@ postcss([
                 `./${STYLE_PATH}/${BASE}.css`
             ])
         });
-        buffer = csso.minify(purger.purge()[0].css, {comments: 'none'}).css;
+        buffer = csso.minify(purged[0].css, {comments: 'none'}).css;
     }
 
     fs.outputFileSync(`./${TMP}/${page}/${ROOT}.css`, buffer);

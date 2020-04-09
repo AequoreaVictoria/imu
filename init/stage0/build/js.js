@@ -9,7 +9,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const rollup = require('rollup').rollup;
 const includepaths = require('rollup-plugin-includepaths');
-const commonjs = require('rollup-plugin-commonjs');
+const commonjs = require('@rollup/plugin-commonjs');
 const minify = require('terser').minify;
 const hmin = require('../lib/hmin');
 
