@@ -16,7 +16,7 @@ function exists(file) {
 
 function find(file) {
     if (exists(file)) return file;
-    for (let ext in Current.extensions.length) {
+    for (let ext in Current.extensions) {
         const match = file + Current.extensions[ext];
         if (exists(match)) return match;
     }
