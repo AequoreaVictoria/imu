@@ -1,11 +1,15 @@
 {
   "name": "imu-build",
-  "description": "Incrementally build statically-linked pages and servers with tup.",
-  "version": "0.0.12",
+  "description": "Incrementally build statically-linked pages with tup.",
+  "version": "0.1.0",
   "main": "imu.js",
   "license": "0BSD",
   "bin": {
     "imu": "./imu.js"
+  },
+  "scripts": {
+    "format": "prettier --write .",
+    "lint": "eslint --fix ."
   },
   "repository": {
     "type": "git",
@@ -13,7 +17,13 @@
   },
   "dependencies": {
     "child_process": "^1.0.2",
-    "fs-extra": "9.0.0",
+    "fs-extra": "9.1.0",
     "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.2.0",
+    "husky": "^6.0.0",
+    "prettier": "^2.2.1"
   }
 }

@@ -1,7 +1,9 @@
 # imu :fire: :pig: :fire:
-> Incrementally build statically-linked pages and servers with tup.
+
+> Incrementally build statically-linked pages with tup.
 
 ## What is it? Why?
+
 This is an opinionated build system that has made all the decisions for you.
 
 It works with simple commands. It is incremental and runs only tasks when
@@ -19,30 +21,31 @@ using the [Vue.js][24] suite instead of [Stage0][1] and [S.js][2], however this
 adds about 30KB in size and has different performance characteristics. It is,
 however, much more familiar to developers.
 
-JavaScript is ES6, CSS is [PostCSS Preset Env][4], HTML is preprocessed, all is
-aggressively minified and packed into single HTML page. It is easy to build many
-pages, with as little or as much CSS and JavaScript as needed -- the natural unit
- for splitting up bundle sizes.
+JavaScript is ES6, CSS and HTML are preprocessed, all is aggressively minified
+and packed into single HTML page. It is easy to build many pages, with as
+little or as much CSS and JavaScript as needed -- the natural unit for
+splitting up bundle sizes.
 
 At around 64KB~128KB compressed, you may want to start thinking about a new page.
 
-Reading the  `.imu` source installed into your project is a good idea. You are
+Reading the `.imu` source installed into your project is a good idea. You are
 encouraged to fork, modify and otherwise twist the contents to your needs.
 
 ### Requirements
-* [Node.js][6]
+
+- [Node.js][6]
 
 ### Optional Dependencies
-* `npm install --global imu-build`
-* [tup][0]
-* [.NET Core 3.0][7]
-* [MySQL][8]
 
-Neither [tup][0] nor `imu-build` are required to build an *imu* project. Your
+- `npm install --global imu-build`
+- [tup][0]
+
+Neither [tup][0] nor `imu-build` are required to build an _imu_ project. Your
 end-users may always execute `npm build` in the project root to get a
 release build.
 
 #### Tup
+
 By default, it generates [tup][0] build logic to provide the incrementing,
 parallel build and deployment system.
 
@@ -53,6 +56,7 @@ the deployment directory, but this will allow anyone to build a project with
 no additional dependencies beyond [Node.js][6].
 
 #### imu-build
+
 This guide will assume you will have installed `imu-build` in order to use the
 `imu` command from anywhere in the project tree. However, from the project
 root you may always use `npm run` to execute the very same commands.
@@ -67,18 +71,18 @@ The `init` command is only available with `imu-build`.
 
 ## Client Overview
 
-| Commands           | Description
-|--------------------|---------------------------------------------------------
-| imu init [option]  | Installs the build scripts and npm dependencies.
-| imu new [options]  | Create new projects and templates.
-| imu client-debug   | Builds the client in debug mode.
-| imu client-release | Builds the client in release mode.
+| Commands           | Description                                      |
+| ------------------ | ------------------------------------------------ |
+| imu init [option]  | Installs the build scripts and npm dependencies. |
+| imu new [options]  | Create new projects and templates.               |
+| imu client-debug   | Builds the client in debug mode.                 |
+| imu client-release | Builds the client in release mode.               |
 
 The `init` command may take an optional arguement of either `stage0` or `vue`.
 If not provided, it will default to `stage0`. The following example explains
 the default workflow.
 
-``` Shell
+```Shell
 $ npm install --global imu-build
 $ mkdir (Project)
 $ cd (Project)
@@ -110,13 +114,14 @@ Names should not contain spaces and should be valid as an HTML ID tag. These
 commands generate a new set of files to edit inside `client/pages/(PageName)`.
 
 ### Layout
-|                   | Page Structure
-|-------------------|----------------------------------------------
-| components/*.js   | Component code.
-| license.html      | License comment tag; prepended to the page.
-| root.html         | Entry point into the page's actual DOM code.
-| root.css          | Entry point into the page style.
-| root.js           | Entry point into the page code.
+
+|                  | Page Structure                               |
+| ---------------- | -------------------------------------------- |
+| components/\*.js | Component code.                              |
+| license.html     | License comment tag; prepended to the page.  |
+| root.html        | Entry point into the page's actual DOM code. |
+| root.css         | Entry point into the page style.             |
+| root.js          | Entry point into the page code.              |
 
 Each page is given a `components/` directory to hold component JS,
 HTML templates and assorted JavaScript code specific to the page.
@@ -132,17 +137,16 @@ to resolve conflicts.
 
 The compiled page files are placed in `deploy/client`.
 
-
-|                   | Project Structure
-|-------------------|----------------------------------------------------
-| client/pages      | Code for each application page.
-| client/share      | Code shared between each application page.
-| client/style      | Style code and Tailwind configuration.
-| client/svg        | SVG icons available for inlining.
-| client/util       | Third-party libraries used by application pages.
-| deploy/client     | The destination of compiled pages.
-| deploy/static     | All static files and content, available via /static
-| tmp               | Temporary files created during the build process.
+|               | Project Structure                                   |
+| ------------- | --------------------------------------------------- |
+| client/pages  | Code for each application page.                     |
+| client/share  | Code shared between each application page.          |
+| client/style  | Style code and Tailwind configuration.              |
+| client/svg    | SVG icons available for inlining.                   |
+| client/util   | Third-party libraries used by application pages.    |
+| deploy/client | The destination of compiled pages.                  |
+| deploy/static | All static files and content, available via /static |
+| tmp           | Temporary files created during the build process.   |
 
 The `client/style` directory contains the `tailwind.config.js` file and
 is a good place for stylesheets you wish to `@import` into pages. For example,
@@ -171,25 +175,26 @@ may be the same across all of your pages. You will need to create the
 Other potential paths could include things such as `client/store` and
 `client/api` for holding modules for [S.js][2] (or [Vuex][24]) store and API
 request related abstractions. `client/router.js` could hold your application's
-router configuration. These paths require no specific support from *imu*.
+router configuration. These paths require no specific support from _imu_.
 
 ### Bundling
+
 JavaScript is bundled with [Rollup.js][13], offering you ES6-level modules your
 page. For release builds, [Terser][14] is used to minimize the compiled page
 bundle with full ES6 support.
 
-CSS is processed with [PostCSS][10], with [CSS Import][15] and
-[PostCSS Preset Env][4], which provides a number of current CSS spec features.
-[PostCSS Preset Env][4] also runs a pass with [Autoprefixer][17], saving you
-from writing vendor-specific prefixes. For release builds, all unused CSS
-classes are automatically purged from the resulting code using [PurgeCSS][18].
-[CSSO][19] is used as a final pass to minimize the code.
+CSS is processed with [PostCSS][10] using [PostCSS Import][15],
+[PostCSS Nested][4], and [Autoprefixer][17], saving you from writing
+vendor-specific prefixes. For release builds, all unused CSS classes are
+automatically purged from the resulting code using [PurgeCSS][18]. [CSSO][19]
+is used as a final pass to minimize the code.
 
 On release builds, the final HTML is run through [HTMLMinifier][20] prior to
 compression with gzip.
 
 ### Preprocessor Directives
-*imu* provides a set of directives available for use within files being
+
+_imu_ provides a set of directives available for use within files being
 built. For HTML it is: `@import`, `@script` and`@svg`.
 
 The `@import` directive must be enclosed in a comment tag. This will copy the
@@ -200,7 +205,7 @@ importing file. It will also search the subdirectories of `client` and
 `client/pages`.
 
 A `@script` directive has also been included, which behaves the same as
-`@import` but will wrap the results in `<script type="x/templates">` tags. An
+`@import` but will wrap the results in `type="x/templates"` script tags. An
 ID based upon the filename is included in these tags. As such, filenames must
 consist only of valid ID characters and should not contain spaces.
 
@@ -225,6 +230,7 @@ In [Vue.js][24] HTML templates, only the `@import` directive is available.
 ```
 
 ##### SVG
+
 An `@svg` directive has also been provided. It is used just like `@import` and
 `@script`.
 
@@ -236,6 +242,7 @@ Furthermore, the `fill` attribute is set to 'inherit' and any `height` or
 `width` attribute is removed prior to inlining.
 
 ##### Vue
+
 A `@vue` directive has been provided for use inside JavaScript components.
 It will compile and inline the specified HTML template as a set of `render`
 and `staticRenderFns` variables that can then be passed to the Vue object.
@@ -260,50 +267,25 @@ var App = Vue.component("Example", {render, staticRenderFns});
 export default App;
 ```
 
-## Server Overview
-Optional [.NET Core 3.0][7] and [MySQL][8] support is provided as follows:
-
-    * `imu server` builds the server project natively & SQL schema.
-    * `imu server-linux` builds the server project specifically for Linux.
-    * `imu sql` builds the SQL schema.
-
-Copying configuration files, including [nginx][5] is done by:
-
-    * `imu copy-conf` Copies all server-related configuration into 'deploy/'.
-
-Furthermore, `new` has the following additional commands:
-
-    * `imu new --server ServerName` starts a new server codebase.
-    * `imu new --table Name` starts a new SQL table file.
-    * `imu new --patch` starts a new SQL migration patch file.
-
-Neither [.NET Core 3.0][7] or [MySQL][8] build support makes use of [tup][0].
-
-### SQL Preprocessor
-An equivalent of `@import` has been added for [MySQL][8] and is used much the same.
-
-```MySQL
-# @import "./local/table/name"
-```
-
-This is processed via the `imu sql` command.
-
 ## Resetting
+
 Should any issues with build artifacts arise, you may always try `imu reset`.
 
 This will remove all build artifacts from the project. As your project expands,
 you may wish to update the list of files `reset` will remove in `./.imu/reset.js`.
 
 ## Version Check
+
 You may quickly determine the version installed by using `imu version`. This
 will print the version of the globally installed `imu-build` package. If you
 are currently in a project directory, it will also print the version of the
 build scripts that have been installed via `imu init`.
 
 ## License
+
 [0BSD][23]
 
-As *imu* aggressively strips code, including the original copyright comments,
+As _imu_ aggressively strips code, including the original copyright comments,
 the relevant copyright notices are added as a document comment to all pages
 built for release. Be sure to keep `license.html` up to date as you change
 libraries.
@@ -312,11 +294,8 @@ libraries.
 [1]: https://github.com/Freak613/stage0
 [2]: https://github.com/adamhaile/S
 [3]: https://tailwindcss.com/
-[4]: https://preset-env.cssdb.org/
-[5]: https://nginx.org/
+[4]: https://github.com/postcss/postcss-nested
 [6]: https://nodejs.org/
-[7]: https://www.microsoft.com/net/download/dotnet-core/3.0
-[8]: https://www.mysql.com/
 [9]: https://github.com/csstools/normalize.css/
 [10]: http://postcss.org/
 [11]: https://suitcss.github.io/

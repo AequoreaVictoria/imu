@@ -1,26 +1,31 @@
 {
   "private": true,
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^18.0.0",
+    "autoprefixer": "^10.2.5",
     "child_process": "^1.0.2",
-    "csso": "^4.0.3",
+    "csso": "^4.2.0",
+    "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.2.0",
     "fs": "0.0.1-security",
-    "fs-extra": "^9.0.0",
+    "fs-extra": "^9.1.0",
     "glob": "^7.1.6",
     "html-minifier": "^4.0.0",
+    "husky": "^6.0.0",
     "node-gzip": "^1.1.2",
-    "patch-package": "^6.2.2",
+    "patch-package": "^6.4.7",
     "path": "^0.12.7",
-    "postcss": "^7.0.27",
-    "postcss-import": "^12.0.1",
-    "postcss-preset-env": "^6.7.0",
-    "purgecss": "^2.1.2",
+    "postcss": "^8.2.12",
+    "postcss-import": "^14.0.1",
+    "postcss-nested": "^5.0.5",
+    "prettier": "^2.2.1",
+    "purgecss": "^4.0.3",
     "purgecss-whitelister": "^2.4.0",
-    "rollup": "^2.3.4",
-    "@rollup/plugin-commonjs": "^11.0.2",
-    "rollup-plugin-includepaths": "^0.2.3",
-    "tailwindcss": "^1.2.0",
-    "terser": "^4.6.11",
-    "xmldom": "^0.3.0"
+    "rollup": "^2.45.2",
+    "rollup-plugin-includepaths": "^0.2.4",
+    "tailwindcss": "^2.1.2",
+    "terser": "^5.6.1",
+    "xmldom": "^0.6.0"
   },
   "dependencies": {
     "s-array": "^0.4.10",
@@ -36,10 +41,8 @@
     "new": "node ./.imu/run.js new",
     "client-debug": "node ./.imu/run.js client-debug",
     "client-release": "node ./.imu/run.js client-release",
-    "server": "node ./.imu/run.js server",
-    "server-linux": "node ./.imu/run.js server-linux",
-    "sql": "node ./.imu/run.js sql",
-    "copy-conf": "node ./.imu/run.js copy-conf",
-    "reset": "node ./.imu/run.js reset"
+    "reset": "node ./.imu/run.js reset",
+    "format": "prettier --write .",
+    "lint": "eslint --fix ."
   }
 }

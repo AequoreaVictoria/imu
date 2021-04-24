@@ -1,9 +1,4 @@
 .tup
 node_modules
 tmp
-server/bin
-server/obj
 deploy/client
-deploy/server
-deploy/nginx.conf
-deploy/ssl

@@ -1,0 +1,7 @@
+node_modules
+deploy
+dist
+tmp
+.imu
+pnpm-lock.yaml
+package-lock.json

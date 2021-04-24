@@ -3,17 +3,17 @@
 
 // Prepended to all 'client-release' built pages.
 function getLicenseHTML() {
-    const date = new Date();
-    const year = date.getFullYear();
+  const date = new Date();
+  const year = date.getFullYear();
 
-    return `\
+  return `\
 <!--
  * Copyright (c) ${year} Someone [UNLICENSED]
  *
  * Using
- * Normalize.css [MIT License] Copyright (c) Nicolas Gallagher
- *                             Copyright (c) Jonathan Neal
- * SUIT CSS      [MIT License] Copyright (c) Nicolas Gallagher:
+ * modern-normalize [MIT License] Copyright (c) Nicolas Gallagher
+ *                                Copyright (c) Jonathan Neal
+ *                                Copyright (c) Sindre Sorhus
  * Tailwind CSS  [MIT License] Copyright (c) Adam Wathan
  *                             Copyright (c) Jonathan Reinink
  * Stage0        [MIT License] Copyright (c) Pavel Martynov
@@ -44,7 +44,7 @@ function getLicenseHTML() {
 
 // The actual DOM HTML that the page is built into.
 function getRootHTML(page) {
-    return `\
+  return `\
 <!DOCTYPE html>
 <html lang="en" data-framework="es6">
 <head>
@@ -72,7 +72,7 @@ function getRootHTML(page) {
 
 // Built and injected into '<!-- @inject "css" -->'.
 function getRootCSS(base) {
-    return `\
+  return `\
 @import "${base}";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
@@ -81,7 +81,7 @@ function getRootCSS(base) {
 
 // style/base
 function getBaseCSS() {
-    return `\
+  return `\
 @import "tailwindcss/base";
 
 /* imu overides
@@ -118,7 +118,7 @@ time, mark, audio, video {
 
 // Built and injected into '<!-- @inject "js" -->'.
 function getRootJS(page) {
-    return `\
+  return `\
 import h from "stage0";
 import S from "s-js/dist/es/S";
 import SArray from "s-array/es";
@@ -137,7 +137,7 @@ document.body.appendChild(View);
 }
 
 function getComponentJS(page) {
-    return `\
+  return `\
 import h from "stage0";
 import S from "s-js/dist/es/S";
 
@@ -156,66 +156,11 @@ export default function Component(${page.toLowerCase()}) {
 `;
 }
 
-function getSQLRoot(name) {
-    return `\
-DROP DATABASE IF EXISTS ${name};
-CREATE DATABASE ${name}
-    CHARACTER SET utf8mb4
-    COLLATE utf8mb4_unicode_ci;
-
-USE ${name};
-
-`;
-}
-
-function getSQLTable(name) {
-    return `\
-CREATE TABLE \`${name}\` (
-
-);
-`;
-}
-
-function getServerProj(name) {
-    return `\
-<Project Sdk="Microsoft.NET.Sdk.Web">
-    <PropertyGroup>
-      <TargetFramework>netcoreapp3.0</TargetFramework>
-      <StartupObject>${name}.Program</StartupObject>
-      <Version>1.0.0</Version>
-      <NoWarn>NU1602,NU1701</NoWarn>
-    </PropertyGroup>
-    <ItemGroup>
-        <EmbeddedResource Include="mysql\\patches\\*.sql" />
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="Carter" Version="4.2.0" />
-        <PackageReference Include="Dapper" Version="1.60.6" />
-        <PackageReference Include="Dapper.Contrib" Version="1.60.1" />
-        <PackageReference Include="FluentValidation" Version="8.5.0-preview4" />
-        <PackageReference Include="GracefullShutdown" Version="1.0.3" />
-        <PackageReference Include="jose-jwt" Version="2.4.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.0.0-preview7.19362.4" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.0.0-preview7.19362.4" />
-        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.0.0-preview7.19362.4" />
-        <PackageReference Include="MySql.Data" Version="8.0.17" />
-        <PackageReference Include="SparkPost" Version="1.14.0" />
-    </ItemGroup>
-    <ItemGroup>
-        <Folder Include="mysql\\patches" />
-    </ItemGroup>
-</Project>
-`;
-}
-
 module.exports = {
-    getLicenseHTML,
-    getRootHTML,
-    getRootCSS,
-    getBaseCSS,
-    getRootJS,
-    getComponentJS,
-    getSQLRoot,
-    getSQLTable,
-    getServerProj
+  getLicenseHTML,
+  getRootHTML,
+  getRootCSS,
+  getBaseCSS,
+  getRootJS,
+  getComponentJS,
 };

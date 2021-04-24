@@ -1,57 +1,76 @@
 #!/usr/bin/env node
-const fs = require('fs-extra');
-const path = require('path');
-const execSync = require('child_process').execSync;
+const fs = require("fs-extra");
+const path = require("path");
+const execSync = require("child_process").execSync;
 
 function findRoot() {
-    if (path.parse(process.cwd()).root === process.cwd()) return false;
+  if (path.parse(process.cwd()).root === process.cwd()) return false;
 
-    let nodeRoot = fs.existsSync('./.imu');
-    if (!nodeRoot) {
-        process.chdir('../');
-        nodeRoot = fs.existsSync('./.imu');
-    }
-    if (!nodeRoot) return findRoot();
+  let nodeRoot = fs.existsSync("./.imu");
+  if (!nodeRoot) {
+    process.chdir("../");
+    nodeRoot = fs.existsSync("./.imu");
+  }
+  if (!nodeRoot) return findRoot();
 
-    return true;
+  return true;
 }
 
-if (process.argv[2] === 'version') {
-    const pkg = require('./package.json');
-    console.info(`imu-build v${pkg.version}`);
+if (process.argv[2] === "version") {
+  const pkg = require("./package.json");
+  console.info(`imu-build v${pkg.version}`);
 
-    if (findRoot()) {
-        const localpkg = require(`${process.cwd()}/.imu/version.json`);
-        console.info(`-- project uses v${localpkg.version}`);
-    }
-    return;
+  if (findRoot()) {
+    const localpkg = require(`${process.cwd()}/.imu/version.json`);
+    console.info(`-- project uses v${localpkg.version}`);
+  }
+  return;
 }
 
-if (process.argv[2] === 'init') {
-    const type = process.argv[3] ? process.argv[3] : 'stage0';
-    const target = `${process.cwd()}/.imu/`;
+if (process.argv[2] === "init") {
+  const type = process.argv[3] ? process.argv[3] : "stage0";
+  const target = `${process.cwd()}/.imu/`;
 
-    fs.copySync(`${__dirname}/init/core`, target);
-    fs.copySync(`${__dirname}/init/${type}`, target);
+  fs.copySync(`${__dirname}/init/core`, target);
+  fs.copySync(`${__dirname}/init/${type}`, target);
 
-    const pkg = require('./package.json');
-    fs.outputFileSync(`${target}/version.json`,
-        `{\n  "version": "${pkg.version}"\n}\n`);
+  const pkg = require("./package.json");
+  fs.outputFileSync(
+    `${target}/version.json`,
+    `{\n  "version": "${pkg.version}"\n}\n`
+  );
 
-    fs.moveSync(`${target}/git_ignore`, `${process.cwd()}/.gitignore`);
-    fs.moveSync(`${target}/package.json`, `${process.cwd()}/package.json`);
-    fs.moveSync(`${target}/package-lock.json`, `${process.cwd()}/package-lock.json`);
+  fs.moveSync(`${target}/git_ignore`, `${process.cwd()}/.gitignore`);
+  fs.moveSync(`${target}/package.json`, `${process.cwd()}/package.json`);
+  fs.moveSync(
+    `${target}/package-lock.json`,
+    `${process.cwd()}/package-lock.json`
+  );
+  fs.moveSync(`${target}/pnpm-lock.yaml`, `${process.cwd()}/pnpm-lock.yaml`);
+  fs.moveSync(`${target}/prettierignore`, `${process.cwd()}/.prettierignore`);
+  fs.moveSync(`${target}/eslintrc.json`, `${process.cwd()}/.eslintrc.json`);
+  fs.moveSync(`${target}/husky`, `${process.cwd()}/.husky`);
 
-    try { execSync('npm i', {stdio: 'inherit'}); }
-    catch(e) { process.exit(1); }
-    return;
+  try {
+    execSync("pnpm i", { stdio: "inherit" });
+  } catch (e) {
+    try {
+      execSync("npm i", { stdio: "inherit" });
+    } catch (e) {
+      process.exit(1);
+    }
+  }
+  return;
 }
 
 if (!findRoot()) {
-    console.error('ERROR: No imu directory found in project!');
-    process.exit(1);
+  console.error("ERROR: No imu directory found in project!");
+  process.exit(1);
 }
 
-const args = process.argv.slice(2).join(' ');
-try { execSync(`node ./.imu/run.js ${args}`, {stdio: 'inherit'}); }
-catch(e) { process.exit(1); }
+const args = process.argv.slice(2).join(" ");
+try {
+  execSync(`node ./.imu/run.js ${args}`, { stdio: "inherit" });
+} catch (e) {
+  process.exit(1);
+}
